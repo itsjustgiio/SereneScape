@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 100% 96.9%; /* Pale Lilac */
+    --foreground: 255 25% 30%; /* Dark Grayish Purple */
+
+    --muted: 255 50% 95.5%;
+    --muted-foreground: 255 25% 55%; /* Lighter for muted text */
+
+    --popover: 255 100% 98.5%;
+    --popover-foreground: var(--foreground);
+
+    --card: 255 100% 98.5%; /* Very Light Lilac/Off-white */
+    --card-foreground: var(--foreground);
+
+    --border: 255 50% 90%; /* Light Lavender Border */
+    --input: 255 50% 92%; /* Slightly Lighter Lavender for Input */
+
+    --primary: 255 100% 87.3%; /* Soft Lavender */
+    --primary-foreground: 255 30% 25%; /* Dark Purple for contrast on Primary */
+
+    --secondary: 255 50% 94%; /* Light Grayish Lilac */
+    --secondary-foreground: var(--foreground);
+
+    --accent: 195 26% 56%; /* Muted Teal */
+    --accent-foreground: 0 0% 100%; /* White for contrast on Accent */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 255 70% 75%; /* More saturated lavender for focus rings */
+
+    --radius: 0.5rem;
+
+    /* Sidebar specific colors */
+    --sidebar-background: 255 70% 94%; /* Light lavender, slightly distinct from page bg */
+    --sidebar-foreground: 255 25% 30%; 
+    --sidebar-primary: 255 100% 87.3%; /* Soft Lavender for active items */
+    --sidebar-primary-foreground: 255 30% 25%; 
+    --sidebar-accent: 255 85% 91%; /* Lighter lavender for hover */
+    --sidebar-accent-foreground: 255 30% 25%;
+    --sidebar-border: 255 50% 88%;
+    --sidebar-ring: var(--ring);
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    /* Keeping dark mode fairly standard but aligning with lavender/teal tones if needed */
+    --background: 255 10% 10%; /* Dark Purple/Gray */
+    --foreground: 255 100% 96.9%; /* Pale Lilac (light text) */
+
+    --muted: 255 10% 15%;
+    --muted-foreground: 255 50% 80%;
+
+    --popover: 255 10% 8%;
+    --popover-foreground: var(--foreground);
+
+    --card: 255 10% 8%;
+    --card-foreground: var(--foreground);
+
+    --border: 255 10% 20%;
+    --input: 255 10% 22%;
+
+    --primary: 255 80% 75%; /* Lighter Lavender for Dark Mode */
+    --primary-foreground: 255 20% 15%; /* Dark text on Lighter Lavender */
+
+    --secondary: 255 10% 20%;
+    --secondary-foreground: var(--foreground);
+
+    --accent: 195 30% 50%; /* Slightly desaturated Teal for Dark Mode */
+    --accent-foreground: 0 0% 98%; /* Light text on Teal */
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 255 80% 70%;
+
+    /* Dark Sidebar specific colors */
+    --sidebar-background: 255 12% 12%; 
+    --sidebar-foreground: 255 100% 96.9%; 
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground); 
+    --sidebar-accent: 255 15% 20%; 
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: 255 10% 25%;
+    --sidebar-ring: var(--ring);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+    font-feature-settings: "rlig" 1, "calt" 1; /* Enable common ligatures and contextual alternates */
+  }
+}
+
+/* Calming background animation */
+@keyframes subtleGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.calming-background-animation {
+  background: linear-gradient(
+    -45deg,
+    hsl(255, 100%, 96.9%), /* Pale Lilac */
+    hsl(255, 90%, 92%),  /* Lighter Lavender */
+    hsl(240, 100%, 95%), /* Light Blue-Lavender */
+    hsl(270, 100%, 94%)  /* Light Purple */
+  );
+  background-size: 400% 400%;
+  animation: subtleGradient 30s ease infinite;
+}
+
+/* Breathing animation */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.breathing-circle-animation {
+  animation: breathe 8s ease-in-out infinite;
+}
