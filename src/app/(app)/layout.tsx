@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { mainNavItems, siteConfig } from '@/config/nav';
@@ -18,7 +18,6 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import yumeko from './yumeko.png';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -29,7 +28,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useEffect } from 'react';
 import { supabase } from '../../../lib/supabase/client';
 import {
   LineChart,
@@ -43,7 +41,6 @@ import {
 
 function Prefetcher() {
   const router = useRouter();
-
   useEffect(() => {
     const routes = [
       '/dashboard',
@@ -54,7 +51,6 @@ function Prefetcher() {
     ];
     routes.forEach((route) => router.prefetch(route));
   }, []);
-
   return null;
 }
 
@@ -62,7 +58,47 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
-  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
+
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+  const fetchAvatar = async () => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    // ✅ Log full userData to inspect the structure
+    console.log('👀 userData:', userData);
+
+    if (userError || !userData?.user?.id) {
+      console.error('❌ User fetch error:', userError);
+      return;
+    }
+
+    const userId = userData.user.id;
+
+    const { data: avatarRow, error: fetchError } = await supabase
+      .from('users')
+      .select('avatar_url')
+      .eq('id', userId)
+      .not('avatar_url', 'eq', 'EMPTY')
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error('❌ Avatar fetch error:', fetchError.message);
+    } else if (!avatarRow) {
+      console.warn('⚠️ No avatar found for user:', userId);
+    } else {
+      console.log('✅ Avatar from DB:', avatarRow.avatar_url);
+      setAvatarUrl(avatarRow.avatar_url);
+    }
+  };
+
+  fetchAvatar();
+}, []);
+
+useEffect(() => {
+  console.log("🎯 Final avatarUrl state:", avatarUrl);
+}, [avatarUrl]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -128,8 +164,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 onClick={() => setIsProfileModalOpen(true)}
               >
                 <Avatar className="h-9 w-9 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
-                  <AvatarImage src={yumeko.src} alt="User Avatar" />
-                  <AvatarFallback>SS</AvatarFallback>
+                  {avatarUrl ? (<AvatarImage key={avatarUrl} src={avatarUrl} alt="User Avatar" />) : (<AvatarFallback>SS</AvatarFallback>)}
                 </Avatar>
                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                   <span className="text-sm font-medium text-foreground">
@@ -154,7 +189,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarInset className="flex-1 flex flex-col">
             <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:h-16 sm:px-6">
               <SidebarTrigger className="md:hidden" />
-              <div className="flex-1">{/* Breadcrumbs if needed */}</div>
+              <div className="flex-1"></div>
             </header>
             <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
           </SidebarInset>
@@ -174,8 +209,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           <div className="flex flex-col items-center space-y-6 w-full">
             <Avatar className="h-24 w-24">
-              <AvatarImage src={yumeko.src} alt="User Avatar" />
-              <AvatarFallback>SS</AvatarFallback>
+              {avatarUrl ? (<AvatarImage key={avatarUrl} src={avatarUrl} alt="User Avatar" />) : (<AvatarFallback>SS</AvatarFallback>)}
             </Avatar>
             <div className="flex flex-col items-center">
               <span className="text-lg font-semibold text-foreground">
@@ -190,7 +224,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="flex flex-col sm:flex-row w-full gap-4 mt-6">
-              {/* Mood Table */}
               <div className="w-full sm:w-1/2">
                 <h3 className="text-md font-semibold mb-2">Mood Table</h3>
                 <table className="w-full text-sm border border-border rounded-md">
@@ -213,7 +246,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </table>
               </div>
 
-              {/* Mood Graph */}
               <div className="w-full sm:w-1/2">
                 <h3 className="text-md font-semibold mb-2">Mood Line Graph</h3>
                 <ResponsiveContainer width="100%" height={200}>
