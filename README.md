@@ -1,3 +1,5 @@
+🎥 [Watch the Live Demo on YouTube](https://www.youtube.com/watch?v=0lZ8QidDQrE)
+
 # 🌿 SereneScape — A Personalized Mood Companion
 
 SereneScape is a lightweight, privacy-focused mental wellness web app built during a hackathon. It offers users a calm space to check in on their emotions, log moods over time, and receive AI-powered suggestions — all while respecting their privacy and mental bandwidth.
