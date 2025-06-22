@@ -28,7 +28,7 @@ export default function SignupPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
@@ -40,18 +40,38 @@ export default function SignupPage() {
         },
       });
 
+      console.log(data);
+  
       if (signUpError) {
         setError(signUpError.message);
-      } else {
+        return;
+      }
+  
+      if (data?.user) {
+        const { error: insertError, data: insertData } = await supabase.from('users').insert({
+          id: data.user.id,
+          full_name: fullName,
+          email: email,
+        });
+      
+        console.log('Insert response:', { insertData, insertError });
+      
+        if (insertError) {
+          setError('Signup succeeded, but saving user profile failed.');
+          console.error('Insert error:', insertError);
+          return;
+        }
+      
         router.push('/login');
       }
     } catch (err) {
-      console.error(err);
+      console.error('Unexpected error:', err);
       setError('Unexpected error occurred');
     } finally {
       setLoading(false);
     }
   }
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen">
