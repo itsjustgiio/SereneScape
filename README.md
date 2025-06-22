@@ -117,5 +117,6 @@ GEMINI_API_KEY=your_api_key_here
 
 ## 🙏 Credits
 Built by Me(Giovanni), @jtega149, @Lindan Thillanayagam
+
 Thanks to Google Gemini, Supabase, Firebase, and all the incredible open-source libraries that made this possible.
 
