@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result);
 
   } catch (err: any) {
-    console.error('❌ Error classifying mood:', err.message);
+    console.error('An Error occurred while classifying mood:', err.message);
     return NextResponse.json({ error: 'Failed to classify mood', detail: err.message }, { status: 500 });
   }
 }
