@@ -10,7 +10,8 @@ export type GenerateAffirmationsOutput = {
 };
 
 /**
- * Generates unique affirmations by randomly adjusting tone, language style, and request phrasing.
+ * Generates unique affirmations by randomly adjusting tone, language style, and request phrasing./'
+ * user inputted
  */
 export async function generatePersonalizedAffirmations(
   input: GenerateAffirmationsInput
