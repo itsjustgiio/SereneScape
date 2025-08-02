@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
 
   } catch (err: any) {
     //catching error if mood cannot be classified
+    // updated error catching
     console.error('An Error occurred while classifying mood:', err.message);
     return NextResponse.json({ error: 'Failed to classify mood', detail: err.message }, { status: 500 });
   }
